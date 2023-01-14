@@ -2,7 +2,7 @@ from django.contrib.auth.models import BaseUserManager
 from django.forms import model_to_dict
 
 import storeuser.models
-from storeuser.constants import GENDER
+from storeuser.constants import GENDER, UerDetails
 from utils.validations import Validations
 
 
@@ -99,3 +99,14 @@ class StoreUsermanager(BaseUserManager):
         except Exception as e:
             raise Exception('User ID doesnot exist')
         user.delete()
+
+    @staticmethod
+    def getStoreUserDetails(id):
+        try:
+            user = storeuser.models.StoreUsers.objects.get(id=id)
+        except Exception as e:
+            raise Exception("User ID doesnot exist")
+
+    @staticmethod
+    def getAllUsers():
+        return list(storeuser.models.StoreUsers.objects.values(*UerDetails.values))
