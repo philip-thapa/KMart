@@ -18,6 +18,7 @@ class User(AbstractBaseUser):
     modifiedAt = models.DateTimeField(db_column='modifiedAt', default=datetime.now)
     isDeleted = models.BooleanField(db_column='isDeleted', default=False)
     isActive = models.BooleanField(db_column='isActive', default=True)
+    is_prime_user = models.BooleanField(db_column='isPrime', default=False)
 
     USERNAME_FIELD = 'phone_no'
 
