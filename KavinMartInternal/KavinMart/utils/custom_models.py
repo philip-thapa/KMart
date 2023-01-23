@@ -2,6 +2,11 @@ from datetime import datetime
 from django.db import models
 
 
+class CustomManager(models.Manager):
+    def get_queryset(self):
+        return super(CustomManager, self).get_queryset().filter(isDeleted=False, isActive=True)
+
+
 class CustomModel(models):
     createdAt = models.DateTimeField(db_column='createdAt', default=datetime.now)
     modifiedAt = models.DateTimeField(db_column='modifiedAt', default=datetime.now)

@@ -1,0 +1,7 @@
+class ModuleGroups:
+
+    ADMIN = 'ADMIN'
+    MANAGER = 'MANAGER'
+    STORE_EMPLOYEE = 'STORE_EMPLOYEE'
+    DELIVERY_GUY = 'DELIVERY_GUY'
+    
