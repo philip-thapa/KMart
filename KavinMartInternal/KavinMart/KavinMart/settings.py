@@ -181,3 +181,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 OTP_SECRET_KEY = 'philip@123'
+
+AUTH_USER_MODEL = 'usermanagement.User'

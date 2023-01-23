@@ -7,7 +7,7 @@ class CustomManager(models.Manager):
         return super(CustomManager, self).get_queryset().filter(isDeleted=False, isActive=True)
 
 
-class CustomModel(models):
+class CustomModel(models.Model):
     createdAt = models.DateTimeField(db_column='createdAt', default=datetime.now)
     modifiedAt = models.DateTimeField(db_column='modifiedAt', default=datetime.now)
     isDeleted = models.BooleanField(db_column='isDeleted', default=False)

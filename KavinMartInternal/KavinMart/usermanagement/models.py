@@ -1,10 +1,10 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from datetime import datetime
+from usermanagement.account_user_manager import AccountUserManager
 
 
 # Create your models here.
-from usermanagement.account_user_manager import AccountUserManager
 
 
 class User(AbstractBaseUser):
