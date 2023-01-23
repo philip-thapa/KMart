@@ -1,5 +1,6 @@
 from utils.otp_handler import OTP
 from utils.validations import Validations
+from usermanagement.account_user_manager import AccountUserManager
 
 
 class UserOTPHandler:
@@ -8,6 +9,8 @@ class UserOTPHandler:
     def commitment(data):
         email = data.get('email')
         phone = data.get('phone')
+        if AccountUserManager.check_existing_user(email, phone):
+            raise Exception('User already exists')
         otp = None
         if email:
             Validations.email_validation(email)

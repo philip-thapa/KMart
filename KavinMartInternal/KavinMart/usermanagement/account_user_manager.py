@@ -11,14 +11,10 @@ class AccountUserManager(BaseUserManager):
     @staticmethod
     def create_user(payload_data):
         AccountUserManager.validate_payload_data(payload_data)
-
-        is_email = False
-        if payload_data.get('email'):
-            is_email = True
         user = User(
-            phone_no=payload_data.get('phoneNo'),
-            email=payload_data.get('email').strip(),
-            is_email_logged=is_email,
+            first_name=payload_data.get('firstName').strip(),
+            last_name=payload_data.get('lastName').strip(),
+            phone_no=payload_data.get('phoneNo').strip(),
         )
         user.set_password(payload_data.get('password').strip())
         user.save()
@@ -26,17 +22,13 @@ class AccountUserManager(BaseUserManager):
 
     @staticmethod
     def validate_payload_data(payload_data):
-        if not payload_data.get('phoneNo').strip() or not payload_data.get('email').strip():
-            raise Exception('Phone or Email is required')
-        if payload_data.get('phoneNo').strip() and not Validations.phone_no_validation(payload_data.get('phoneNo')):
-            raise Exception('Invalid phone number')
-        if payload_data.get('email').strip() and not Validations.email_validation(payload_data.get('email')):
-            raise Exception('Invalid email address')
-        if AccountUserManager.check_existing_user(payload_data.get('email'), payload_data.get('phoneNo')):
-            raise Exception('User already exists')
+        if not payload_data.get('firstName').strip():
+            raise Exception('First name is required')
+        if not payload_data.get('password').strip():
+            raise Exception('Password is required')
 
     @staticmethod
-    def check_existing_user(email, phone):
+    def check_existing_user(email=None, phone=None):
         try:
             User.objects.get(Q(email=email) | Q(phone_no=phone))
             return True
