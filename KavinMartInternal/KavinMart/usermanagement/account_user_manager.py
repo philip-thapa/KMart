@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
+from django.db.models import Q
 from django.forms import model_to_dict
 
 from usermanagement.models import User
@@ -8,8 +9,9 @@ from utils.validations import Validations
 class AccountUserManager(BaseUserManager):
 
     @staticmethod
-    def create_store_user(payload_data):
+    def create_user(payload_data):
         AccountUserManager.validate_payload_data(payload_data)
+
         is_email = False
         if payload_data.get('email'):
             is_email = True
@@ -30,3 +32,13 @@ class AccountUserManager(BaseUserManager):
             raise Exception('Invalid phone number')
         if payload_data.get('email').strip() and not Validations.email_validation(payload_data.get('email')):
             raise Exception('Invalid email address')
+        if AccountUserManager.check_existing_user(payload_data.get('email'), payload_data.get('phoneNo')):
+            raise Exception('User already exists')
+
+    @staticmethod
+    def check_existing_user(email, phone):
+        try:
+            User.objects.get(Q(email=email) | Q(phone_no=phone))
+            return True
+        except Exception as e:
+            return False
