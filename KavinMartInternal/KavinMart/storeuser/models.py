@@ -2,10 +2,13 @@ from django.db import models
 import jsonfield
 from datetime import datetime
 from django.contrib.auth.models import AbstractBaseUser
+from rest_framework.fields import JSONField
+
 from storeuser.store_user_account_manager import StoreUsermanager
 
 
 class StoreUsers(AbstractBaseUser):
+
     user_id = models.CharField(db_column='StoreUserID', unique=True, blank=False, null=False, max_length=24)
     first_name = models.CharField(db_column='FirstName', blank=False, null=False, max_length=16)
     last_name = models.CharField(db_column='LastName', blank=True, null=True, max_length=16)
@@ -14,7 +17,8 @@ class StoreUsers(AbstractBaseUser):
     address = models.CharField(db_column='Address', blank=True, null=True, max_length=256)
     aadhar_no = models.CharField(db_column='AadharNo', blank=True, null=True, max_length=12)
     pan_no = models.CharField(db_column='PanNo', blank=True, null=True, max_length=10)
-    role = jsonfield.JSONField(db_column='ROLE', blank=False, null=False, max_length=256)
+    # role = jsonfield.JSONField(db_column='ROLE', blank=False, null=False, max_length=256)
+    role = JSONField(db_column='ROLE', default=['staff'])
     dob = models.DateField(db_column='DOB', null=True, blank=True)
     father_name = models.CharField(db_column='FatherName', null=True, blank=True, max_length=24)
     gender = models.CharField(db_column='Gender', null=True, blank=True, max_length=1)
