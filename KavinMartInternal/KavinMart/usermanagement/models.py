@@ -33,6 +33,7 @@ class AccountUserManager(BaseUserManager):
         if not payload_data.get('password').strip():
             raise Exception('Password is required')
 
+
 # Create your models here.
 gender_choice = (
     ('M', 'M'),
@@ -76,6 +77,7 @@ class StoreUserDetails(CustomModel):
     father_name = models.CharField(db_column='FatherName', null=True, blank=True, max_length=24)
     gender = models.CharField(db_column='Gender', max_length=1, choices=gender_choice, default='')
     alternate_phone_no = models.CharField(db_column='alternatePhone', null=True, blank=True, max_length=10)
+    created_by = models.CharField(db_column='createdBy', null=True, blank=True)
 
 
 class Address(CustomModel):
