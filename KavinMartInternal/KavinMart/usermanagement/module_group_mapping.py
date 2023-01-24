@@ -1,5 +1,5 @@
-from storeuser.module_groups import ModuleGroups
-from storeuser.roles import Roles
+from usermanagement.module_groups import ModuleGroups
+from usermanagement.roles import Roles
 
 ModuleGroupsMapping = {
     ModuleGroups.ADMIN: [

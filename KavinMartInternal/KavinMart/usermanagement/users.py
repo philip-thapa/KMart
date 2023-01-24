@@ -1,5 +1,5 @@
-from storeuser.module_group_mapping import ModuleGroupsMapping
-from storeuser.module_groups import ModuleGroups
+from usermanagement.module_group_mapping import ModuleGroupsMapping
+from usermanagement.module_groups import ModuleGroups
 
 
 class Users:

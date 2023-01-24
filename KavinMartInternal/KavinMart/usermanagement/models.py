@@ -2,9 +2,14 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
 from datetime import datetime
 from usermanagement.account_user_manager import AccountUserManager
-
+from utils.custom_models import CustomModel
 
 # Create your models here.
+gender_choice = (
+    ('M', 'M'),
+    ('F', 'F'),
+    ('', '')
+)
 
 
 class User(AbstractBaseUser):
@@ -12,13 +17,14 @@ class User(AbstractBaseUser):
     last_name = models.CharField(db_column='LastName', blank=True, null=True, max_length=16)
     phone_no = models.CharField(db_column='PhoneNo', unique=True, blank=False, null=False, max_length=10)
     email = models.EmailField(db_column='Email', unique=True, blank=True, null=True, max_length=16)
-    gender = models.CharField(db_column='Gender', null=True, blank=True, max_length=1)
-    is_email_logged = models.BooleanField(db_column='IsEmailLogged', default=False)
+    is_email_verified = models.BooleanField(db_column='IsEmailVerified', default=False)
+    is_prime_user = models.BooleanField(db_column='isPrime', default=False)
+    is_store_user = models.BooleanField(db_column='isStoreUser', default=False)
+    roles = models.JSONField(db_column='ROLES', default=[])
     createdAt = models.DateTimeField(db_column='createdAt', default=datetime.now)
     modifiedAt = models.DateTimeField(db_column='modifiedAt', default=datetime.now)
     isDeleted = models.BooleanField(db_column='isDeleted', default=False)
     isActive = models.BooleanField(db_column='isActive', default=True)
-    is_prime_user = models.BooleanField(db_column='isPrime', default=False)
 
     USERNAME_FIELD = 'phone_no'
 
@@ -28,3 +34,37 @@ class User(AbstractBaseUser):
 
     class Meta:
         db_table = 'Users'
+
+
+class StoreUserDetails(CustomModel):
+    employee_id = models.ForeignKey(User, related_name="store_employee_id", on_delete=models.CASCADE,
+                                    db_column="EmployeeID")
+    user_id = models.CharField(db_column='StoreUserID', unique=True, blank=False, null=False, max_length=24)
+    address = models.CharField(db_column='Address', blank=True, null=True, max_length=256)
+    aadhar_no = models.CharField(db_column='AadharNo', blank=True, null=True, max_length=12)
+    pan_no = models.CharField(db_column='PanNo', blank=True, null=True, max_length=10)
+    dob = models.DateField(db_column='DOB', null=True, blank=True)
+    father_name = models.CharField(db_column='FatherName', null=True, blank=True, max_length=24)
+    gender = models.CharField(db_column='Gender', max_length=1, choices=gender_choice, default='')
+    alternate_phone_no = models.CharField(db_column='alternatePhone', null=True, blank=True, max_length=10)
+
+
+class Address(CustomModel):
+    primary_address = models.TextField(db_column='primaryAddress', blank=True, null=True)
+    secondary_address = models.TextField(db_column='secondary_address', blank=True, null=True)
+
+
+class UserLog(CustomModel):
+    user_id = models.ForeignKey(User, related_name="user_id_log", on_delete=models.CASCADE, db_column="userID")
+    first_name = models.CharField(db_column='FirstName', blank=False, null=False, max_length=16)
+    last_name = models.CharField(db_column='LastName', blank=True, null=True, max_length=16)
+    phone_no = models.CharField(db_column='PhoneNo', unique=True, blank=False, null=False, max_length=10)
+    email = models.EmailField(db_column='Email', unique=True, blank=True, null=True, max_length=16)
+    is_email_verified = models.BooleanField(db_column='IsEmailVerified', default=False)
+    is_prime_user = models.BooleanField(db_column='isPrime', default=False)
+    is_store_user = models.BooleanField(db_column='isStoreUser', default=False)
+    roles = models.JSONField(db_column='ROLES', default=[])
+
+
+class Roles(CustomModel):
+    role_name = models.CharField(db_column='roleName', unique=True)
