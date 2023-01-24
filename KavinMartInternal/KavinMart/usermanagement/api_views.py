@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from usermanagement.models import AccountUserManager
 
-from usermanagement.account_user_manager import AccountUserManager
 from usermanagement.user_otp_handler import UserOTPHandler
 
 

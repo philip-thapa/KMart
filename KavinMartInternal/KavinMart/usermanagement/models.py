@@ -1,8 +1,37 @@
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 from datetime import datetime
-from usermanagement.account_user_manager import AccountUserManager
+from django.forms import model_to_dict
 from utils.custom_models import CustomModel
+
+
+class AccountUserManager(BaseUserManager):
+
+    @staticmethod
+    def create_user(payload_data):
+        AccountUserManager.validate_payload_data(payload_data)
+        user = Users(
+            first_name=payload_data.get('firstName').strip(),
+            last_name=payload_data.get('lastName').strip(),
+            phone_no=payload_data.get('phoneNo').strip(),
+        )
+        user.set_password(payload_data.get('password').strip())
+        user.save()
+        user_log = UserLog(
+            user_id_id=user.id,
+            first_name=payload_data.get('firstName').strip(),
+            last_name=payload_data.get('lastName').strip(),
+            phone_no=payload_data.get('phoneNo').strip(),
+        )
+        user_log.save()
+        return model_to_dict(user, exclude=['password'])
+
+    @staticmethod
+    def validate_payload_data(payload_data):
+        if not payload_data.get('firstName').strip():
+            raise Exception('First name is required')
+        if not payload_data.get('password').strip():
+            raise Exception('Password is required')
 
 # Create your models here.
 gender_choice = (
@@ -12,7 +41,7 @@ gender_choice = (
 )
 
 
-class User(AbstractBaseUser):
+class Users(AbstractBaseUser):
     first_name = models.CharField(db_column='FirstName', blank=False, null=False, max_length=16)
     last_name = models.CharField(db_column='LastName', blank=True, null=True, max_length=16)
     phone_no = models.CharField(db_column='PhoneNo', unique=True, blank=False, null=False, max_length=10)
@@ -37,7 +66,7 @@ class User(AbstractBaseUser):
 
 
 class StoreUserDetails(CustomModel):
-    employee_id = models.ForeignKey(User, related_name="store_employee_id", on_delete=models.CASCADE,
+    employee_id = models.ForeignKey(Users, related_name="store_employee_id", on_delete=models.CASCADE,
                                     db_column="EmployeeID")
     user_id = models.CharField(db_column='StoreUserID', unique=True, blank=False, null=False, max_length=24)
     address = models.CharField(db_column='Address', blank=True, null=True, max_length=256)
@@ -55,7 +84,7 @@ class Address(CustomModel):
 
 
 class UserLog(CustomModel):
-    user_id = models.ForeignKey(User, related_name="user_id_log", on_delete=models.CASCADE, db_column="userID")
+    user_id = models.ForeignKey(Users, related_name="user_id_log", on_delete=models.CASCADE, db_column="userID")
     first_name = models.CharField(db_column='FirstName', blank=False, null=False, max_length=16)
     last_name = models.CharField(db_column='LastName', blank=True, null=True, max_length=16)
     phone_no = models.CharField(db_column='PhoneNo', unique=True, blank=False, null=False, max_length=10)

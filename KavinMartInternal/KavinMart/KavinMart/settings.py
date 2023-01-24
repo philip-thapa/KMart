@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
-    'storeuser.apps.StoreuserConfig'
+    'usermanagement.apps.UsermanagementConfig'
 ]
 
 MIDDLEWARE = [
@@ -182,4 +182,4 @@ STATIC_URL = '/static/'
 
 OTP_SECRET_KEY = 'philip@123'
 
-AUTH_USER_MODEL = 'usermanagement.User'
+AUTH_USER_MODEL = 'usermanagement.Users'
