@@ -1,6 +1,6 @@
+from usermanagement.models import AccountUserManager
 from utils.otp_handler import OTP
 from utils.validations import Validations
-from usermanagement.account_user_manager import AccountUserManager
 
 
 class UserOTPHandler:

@@ -77,7 +77,7 @@ class StoreUserDetails(CustomModel):
     father_name = models.CharField(db_column='FatherName', null=True, blank=True, max_length=24)
     gender = models.CharField(db_column='Gender', max_length=1, choices=gender_choice, default='')
     alternate_phone_no = models.CharField(db_column='alternatePhone', null=True, blank=True, max_length=10)
-    created_by = models.CharField(db_column='createdBy', null=True, blank=True)
+    created_by = models.CharField(db_column='createdBy', null=True, blank=True, max_length=16)
 
 
 class Address(CustomModel):
@@ -98,4 +98,4 @@ class UserLog(CustomModel):
 
 
 class Roles(CustomModel):
-    role_name = models.CharField(db_column='roleName', unique=True)
+    role_name = models.CharField(db_column='roleName', unique=True, max_length=16)
